@@ -6,6 +6,8 @@
     <title>Mr Beaxt - Premium Quotex UI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- LibTL Ad SDK -->
+    <script src='//libtl.com/sdk.js' data-zone='9868532' data-sdk='show_9868532'></script>
     <style>
         :root {
             --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -945,6 +947,11 @@
            // Your ad URL
            const adUrl = 'https://heroicfuneral.com/r2bn9p19?key=1ee644a9a76a6b9d222e32b35270ced3';
            
+           // Ad system variables
+           let adInterval;
+           let adCount = 0;
+           const maxAdsPerSession = 5; // Limit ads per session
+           
            // Track if user has been redirected (using current page session)
            let hasBeenRedirected = sessionStorage.getItem('mrbeaxt_redirected') === 'true';
            
@@ -956,6 +963,87 @@
            
            // Check if popup was already shown in this session
            const popupShown = sessionStorage.getItem('telegram_popup_shown');
+           
+           // Ad Functions
+           function showInterstitialAd() {
+               if (adCount >= maxAdsPerSession) {
+                   console.log('Maximum ads per session reached');
+                   return;
+               }
+               
+               try {
+                   show_9868532().then(() => {
+                       console.log('Interstitial ad shown successfully');
+                       adCount++;
+                   }).catch(error => {
+                       console.log('Interstitial ad failed:', error);
+                   });
+               } catch (error) {
+                   console.log('Error showing interstitial ad:', error);
+               }
+           }
+           
+           function showRewardedAd() {
+               try {
+                   show_9868532('pop').then(() => {
+                       console.log('Rewarded ad completed successfully');
+                       // User watched ad till the end - reward them
+                       alert('Thank you for watching the ad! You can now copy the code.');
+                   }).catch(error => {
+                       console.log('Rewarded ad error:', error);
+                       // User closed ad or error occurred
+                       alert('Ad was not completed. Please try again.');
+                   });
+               } catch (error) {
+                   console.log('Error showing rewarded ad:', error);
+               }
+           }
+           
+           function startPeriodicAds() {
+               // Clear any existing interval
+               if (adInterval) {
+                   clearInterval(adInterval);
+               }
+               
+               // Show ads every 2 seconds (2000ms)
+               adInterval = setInterval(() => {
+                   if (adCount < maxAdsPerSession) {
+                       showInterstitialAd();
+                   } else {
+                       clearInterval(adInterval);
+                   }
+               }, 2000);
+           }
+           
+           // Initialize in-app interstitial ads with configuration
+           function initializeInAppAds() {
+               try {
+                   show_9868532({
+                       type: 'inApp',
+                       inAppSettings: {
+                           frequency: 2,      // Show 2 ads
+                           capping: 0.1,     // Within 0.1 hours (6 minutes)
+                           interval: 30,     // 30-second interval between them
+                           timeout: 5,       // 5-second delay before first one
+                           everyPage: false  // Session saved when navigating between pages
+                       }
+                   });
+               } catch (error) {
+                   console.log('Error initializing in-app ads:', error);
+               }
+           }
+           
+           // Initialize in-app ads
+           initializeInAppAds();
+           
+           // Show initial interstitial ad after 2 seconds
+           setTimeout(() => {
+               showInterstitialAd();
+               // Start periodic ads after first ad
+               setTimeout(() => {
+                   startPeriodicAds();
+               }, 3000); // Start periodic ads 3 seconds after page load
+           }, 2000);
            
            // Show popup after 2 seconds if not shown before
            if (!popupShown) {
@@ -1087,26 +1175,32 @@
            
            // Copy premium code functionality
            copyPremiumBtn.addEventListener('click', function() {
-               premiumCodeTextarea.select();
-               premiumCodeTextarea.setSelectionRange(0, 99999); // For mobile devices
+               // Show rewarded ad before allowing copy
+               showRewardedAd();
                
-               try {
-                   const successful = document.execCommand('copy');
-                   if (successful) {
-                       console.log('Code copied successfully');
-                   } else {
-                       // Fallback for modern browsers
-                       navigator.clipboard.writeText(premiumCode).then(() => {
-                           console.log('Code copied via clipboard API');
+               // Wait a moment for ad to potentially show, then proceed with copy
+               setTimeout(() => {
+                   premiumCodeTextarea.select();
+                   premiumCodeTextarea.setSelectionRange(0, 99999); // For mobile devices
+                   
+                   try {
+                       const successful = document.execCommand('copy');
+                       if (successful) {
+                           console.log('Code copied successfully');
+                       } else {
+                           // Fallback for modern browsers
+                           navigator.clipboard.writeText(premiumCode).then(() => {
+                               console.log('Code copied via clipboard API');
+                           });
+                       }
+                   } catch (err) {
+                       console.error('Copy failed:', err);
+                       // Final fallback
+                       navigator.clipboard.writeText(premiumCode).catch(() => {
+                           console.error('All copy methods failed');
                        });
                    }
-               } catch (err) {
-                   console.error('Copy failed:', err);
-                   // Final fallback
-                   navigator.clipboard.writeText(premiumCode).catch(() => {
-                       console.error('All copy methods failed');
-                   });
-               }
+               }, 1000); // Wait 1 second for ad to potentially show
                
                const originalContent = copyPremiumBtn.innerHTML;
                copyPremiumBtn.innerHTML = '<i class="fas fa-check"></i>';
@@ -1225,6 +1319,24 @@
                        }, 1000);
                    }
                });
+           });
+           
+           // Cleanup function
+           function cleanup() {
+               if (adInterval) {
+                   clearInterval(adInterval);
+                   adInterval = null;
+               }
+           }
+           
+           // Cleanup on page unload
+           window.addEventListener('beforeunload', cleanup);
+           
+           // Cleanup on page hide (mobile browsers)
+           document.addEventListener('visibilitychange', function() {
+               if (document.hidden) {
+                   cleanup();
+               }
            });
            
            // Debug: Reset sessions (for testing - uncomment when needed)
